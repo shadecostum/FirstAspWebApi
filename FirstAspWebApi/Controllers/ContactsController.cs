@@ -105,7 +105,7 @@ namespace FirstAspWebApi.Controllers
             {
                 var updateContact = ConvertToModel(contactDto);
                 // var modifiedUser = _userRepo.Update(updatedUser, user);
-                var modifiedContact = _contactRepo.Update(updateContact,contactId);//first pass controller Update
+                var modifiedContact = _contactRepo.Update(updateContact);//first pass controller Update
                 return Ok(modifiedContact);
             }
 

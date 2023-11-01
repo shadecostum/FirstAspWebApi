@@ -19,12 +19,19 @@ namespace FirstAspWebApi.Repositary
        
         public List<ContactDetail> GetAllData()
         {
-            return _context.Details.ToList();
+            return _context.Details.ToList()
+                ;
         }
 
         public ContactDetail GetUserById(int id)
         {
-            return _context.Details.Where(dept => dept.DetailId == id).FirstOrDefault();
+            //checking is Active customer
+            var detail= _context.Details.Where(dept => dept.DetailId == id).FirstOrDefault();
+            if (detail != null)
+            {
+                _context.Entry(detail).State = EntityState.Detached;
+            }
+            return detail;
         }
 
    
@@ -40,18 +47,31 @@ namespace FirstAspWebApi.Repositary
         }
 
 
-        //public ContactDetail UpdateDetails(ContactDetail detail,ContactDetail oldDetails)
+        //public ContactDetail UpdateDetails(ContactDetail detail)
         //{
-        //    var matchId = GetUserById(detail.DetailId);
-        //    if (matchId != null)
-        //    {
-        //        _context.Entry(oldDetails).State = EntityState.Detached;
-        //        _context.Details.Update(detail);
-        //        _context.SaveChanges();
-        //        return matchId;
-        //    }
-        //    return null;
+        //    _context.Details.Update(detail);
+        //    _context.SaveChanges();
+        //    return detail;
+
+
+        //   // var matchId = GetUserById(detail.DetailId);
+        //    //if (matchId != null)
+        //    //{
+        //    //    _context.Entry(oldDetails).State = EntityState.Detached;
+        //    //    _context.Details.Update(detail);
+        //    //    _context.SaveChanges();
+        //    //    return matchId;
+        //    //}
+        //    //return null;
         //}
+
+        public ContactDetail UpdateDetails(ContactDetail detail)
+        {
+         //_context.Entry(oldDetails).State = EntityState.Detached;
+            _context.Details.Update(detail);//inbuild update
+            _context.SaveChanges();
+            return detail;
+        }
 
 
         public bool DeletDetails(int id)

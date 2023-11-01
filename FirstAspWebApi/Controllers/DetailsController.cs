@@ -26,6 +26,8 @@ namespace FirstAspWebApi.Controllers
                 DetailId = detail.DetailId,
                 Type = detail.Type,
                 EmailOrNumber = detail.EmailOrNumber,
+                ContactId=detail.ContactId,
+                
 
             };
 
@@ -85,9 +87,11 @@ namespace FirstAspWebApi.Controllers
         {
             return new ContactDetail()
             {
+                DetailId = recivedDto.DetailId,
                 Type = recivedDto.Type,
                 EmailOrNumber = recivedDto.EmailOrNumber,
                 ContactId = recivedDto.ContactId,
+               
 
             };
 
@@ -116,21 +120,19 @@ namespace FirstAspWebApi.Controllers
             //return BadRequest("bad request for adding");
         }
 
-        //[HttpPut("update")]
-        //public ActionResult Putin(DetailsDto detailDto)
-        //{
-        //    var Details = _repo.GetUserById(detailDto.DetailId);
-        //    if ( Details != null )
-        //    {
-        //        var updatedDetail = ConvertToModel(detailDto);
-        //    }
-        //   // var modifiedUser = _repo.UpdateDetails(contactDetail);
-        //    //if (modifiedUser != null)
-        //    //{
-        //    //    return Ok(modifiedUser);
-        //    //}
-        //    //return BadRequest("id not matched");
-        //}
+        [HttpPut("update")]
+        public ActionResult Put(DetailsDto detailDto)
+        {
+            var oldDetails = _repo.GetUserById(detailDto.DetailId);
+            if (oldDetails != null)
+            {
+                var updatedDetail = ConvertToModel(detailDto);
+                var modifirdDetail = _repo.UpdateDetails(updatedDetail);
+                return Ok(modifirdDetail);
+            }
+            return NotFound("updating error");
+
+        }
 
         [HttpDelete("delete")]
         public ActionResult Delete(int id)
@@ -138,7 +140,7 @@ namespace FirstAspWebApi.Controllers
             bool deteing=_repo.DeletDetails(id);
             if (deteing)
             {
-                return Ok();
+                return Ok(id);
             }
             return BadRequest("no match id for deleting");
         }

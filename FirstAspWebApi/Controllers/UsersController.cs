@@ -20,6 +20,9 @@ namespace FirstAspWebApi.Controllers
 
         //showing dto with all data
 
+
+        //used to user data passed it convert to Dto model so it used to show specific properties only
+
         private UserDto ConvertToDto(User user)
         {
             return new UserDto()
@@ -35,12 +38,16 @@ namespace FirstAspWebApi.Controllers
 
 
         [HttpGet("getAll")]
-
+        //list showing as Dto Model Class Contain
+        //so 1 create a list Dto data to show 
+        //2 call rep fun it retur user table entire data
+        //so we need to show dto spcific data
+        //3 checking return any data contain return badrequest
+        //4 foreach user data convert to Dto by created Dto list.Add each user data
+        //5 return to list to show
         public IActionResult Get()
         {
-            List<UserDto> usersDtoList = new List<UserDto>();//list showing
-
-
+            List<UserDto> usersDtoList = new List<UserDto>();          
             var usersData = _userRepo.GetAllData();
 
             if(usersData.Count==0)
@@ -57,6 +64,11 @@ namespace FirstAspWebApi.Controllers
             return Ok(usersDtoList);
         }
 
+
+
+        //1 using id search data call rep fun id check
+        //2 recive readonly state od specific user data
+        //check data get convert to Dto or notfound
         [HttpGet("getById/{id:int}")]
         public IActionResult Get(int id)
         {
@@ -68,6 +80,10 @@ namespace FirstAspWebApi.Controllers
             }
             return NotFound("No such uwser Exist");
         }
+
+
+
+
 
         private User ConvertToModel(UserDto userDto)
         {
@@ -82,6 +98,17 @@ namespace FirstAspWebApi.Controllers
             };
         }
 
+
+        //dto class initialized properties no needed to fill strictly..... only if [required] set enter strictly 
+        //by adding entire tables connected so we need to added all data
+        //using Dto recive data and convert to user model data specific user data only store
+
+
+        //1 reciving Dto value,function argumnet set as Dto
+        //2 covert Dto to user by private function passing return user data
+        //3 repo func add called and variable passed
+        //4 so user added id return  show Ok()
+        //id not return badrequest
         [HttpPost("add")]
         public IActionResult Post(UserDto userDto)
         {
@@ -98,6 +125,15 @@ namespace FirstAspWebApi.Controllers
             return BadRequest("No data added");
         }
 
+
+
+
+        //1 here also dto data argument set 
+        //2 pass dto id match to any value also detached the id 
+        //3 retrun matched user data
+        //4 we have Dto data so it convert to user data
+        //5 converted data passed to fun update
+        //
         [HttpPut("update")]
         public IActionResult Update(UserDto userDto)
         {
@@ -113,6 +149,13 @@ namespace FirstAspWebApi.Controllers
             return BadRequest("Some issue updating");
         }
 
+
+
+        //take id from user
+        //id passed to repo searchid fun  it detached and return full matched data
+        //call repo delet fun writen pass matched data
+        //retrn id if matched condition inside
+        //else bad request
         [HttpDelete("delete")]
         public IActionResult Delete(int id)
         {

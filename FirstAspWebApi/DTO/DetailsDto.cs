@@ -13,7 +13,7 @@ namespace FirstAspWebApi.DTO
 
         public string EmailOrNumber { get; set; }
 
-        [ForeignKey("Details")]
+        [ForeignKey("Contact")]
         public int ContactId { get; set; }
     }
 }

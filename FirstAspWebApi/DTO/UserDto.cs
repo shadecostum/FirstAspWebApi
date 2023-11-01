@@ -16,6 +16,7 @@ namespace FirstAspWebApi.DTO
 
         public bool IsActive { get; set; }
 
+        //used to show no of contact in each table
         public int CountContacts { get; set; } = 0;//initializing count=0
     }
 }

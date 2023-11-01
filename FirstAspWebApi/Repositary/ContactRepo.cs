@@ -18,14 +18,19 @@ namespace FirstAspWebApi.Repositary
         {
             return _context.contacts
                 .Where(cont=>cont.IsActive==true)
+                .Include(con=>con.ContactDetails)
                 .ToList();
         }
 
         public Contact GetContactById(int id)
         {
-           return _context.contacts.Where(cont1=>cont1.ContactId==id && cont1.IsActive==true)
+            var contact=   _context.contacts.Where(cont1=>cont1.ContactId==id && cont1.IsActive==true)
                 .FirstOrDefault();
-            
+            if(contact!=null)
+            {
+                _context.Entry(contact).State = EntityState.Detached;
+            }
+            return contact;
         }
 
         public int Add(Contact Contact)
@@ -38,9 +43,9 @@ namespace FirstAspWebApi.Repositary
             return newContactId;
         }
 
-        public Contact  Update(Contact updatedContact,Contact oldContact)
+        public Contact  Update(Contact updatedContact)
         {
-            _context.Entry(oldContact).State = EntityState.Detached;//previous contact changing removeing
+           // _context.Entry(oldContact).State = EntityState.Detached;//previous contact changing removeing
             _context.Update(updatedContact);//inbuild update
             _context.SaveChanges() ;
             return updatedContact;
@@ -59,7 +64,11 @@ namespace FirstAspWebApi.Repositary
 
         public void Delete(Contact contact)
         {
+
+            _context.Entry(contact).State = EntityState.Modified;
             contact.IsActive = false;
+            foreach (var contactDetails in _context.Details.Where(userr => userr.ContactId == contact.ContactId))
+                        _context.Details.Remove(contactDetails);
             _context.SaveChanges();
 
             //var contactToDelete = GetContactById(id);

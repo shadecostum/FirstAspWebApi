@@ -13,6 +13,7 @@ namespace FirstAspWebApi.Models
         public string EmailOrNumber { get; set; }
 
         public Contact Contact { get; set; }
+
         [ForeignKey("Contact")]
         public int ContactId { get; set; }
 
