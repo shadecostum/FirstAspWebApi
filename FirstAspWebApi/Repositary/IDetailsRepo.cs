@@ -7,5 +7,10 @@ namespace FirstAspWebApi.Repositary
         public List<ContactDetail> GetAllData();
 
         public ContactDetail GetUserById(int id);
+
+        public int AddDetails(ContactDetail detail);
+
+        //public ContactDetail UpdateDetails(ContactDetail detail);
+        public bool DeletDetails(int id);
     }
 }

@@ -15,6 +15,6 @@ namespace FirstAspWebApi.Models
 
         public bool IsActive { get; set; }
 
-        public List<Contact> Contacts { get; set; }
+        public List<Contact>? Contacts { get; set; }
     }
 }

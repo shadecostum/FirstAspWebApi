@@ -7,6 +7,14 @@ namespace FirstAspWebApi.Repositary
         public List<User> GetAllData();
 
         public User GetUserById(int id);
+
+        public int Add(User user);
+
+        // public User Update(User user);
+        public User Update(User updateUser);
+
+        // public bool Delete(int id);
+        public void Delete(User user);
     }
 
 
