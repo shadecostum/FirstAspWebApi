@@ -34,7 +34,9 @@ namespace FirstAspWebApi.Repositary
         //use some detached funct to untarck user used for readonly state making cannot update
         public User GetUserById(int id)
         {
-            var user= _context.users.Where(user => user.userId == id && user.IsActive == true).FirstOrDefault();
+            var user= _context.users.Where(user => user.userId == id && user.IsActive == true)
+                .Include(usr=>usr.Contacts.Where(us=>us.IsActive==true))
+                .FirstOrDefault();
             if (user != null)
             {
                 _context.Entry(user).State = EntityState.Detached;
@@ -82,12 +84,39 @@ namespace FirstAspWebApi.Repositary
         {
             _context.Entry(user) .State = EntityState.Modified;
                 user.IsActive = false;
-          foreach(var contact in _context.contacts.Where(userr=>userr.UserId==user.userId))
-                    contact.IsActive = false;
+            foreach (var contact in _context.contacts.Where(userr => userr.UserId == user.userId))
+            {
+                contact.IsActive = false;
+           
+            }
           _context.SaveChanges();
             
          
         }
+
+        public void DeleteAll(User user)
+        {
+           
+            _context.Entry(user).State = EntityState.Modified;
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            // Find and mark associated contacts as inactive
+            var contactsToDelete = _context.contacts.Where(contact => contact.UserId == user.userId);
+            foreach (var contact in contactsToDelete)
+            {
+                contact.IsActive = false;
+                _context.Entry(contact).State = EntityState.Modified;
+
+                // Find and delete associated details for the contact
+                var detailsToDelete = _context.Details.Where(detail => detail.ContactId == contact.ContactId);
+                _context.Details.RemoveRange(detailsToDelete);
+            }
+
+            // Save changes to the database
+            _context.SaveChanges();
+        }
+
 
     }
 }

@@ -11,11 +11,11 @@ namespace FirstAspWebApi.Controllers
     public class DetailsController : ControllerBase
     {
         //setting to call any function from class easily interface used
-        private readonly IDetailsRepo _repo;
+        private readonly IDetailsService _detailService;
 
-        public DetailsController(IDetailsRepo repo)
+        public DetailsController(IDetailsService repo)
         {
-            _repo = repo;
+            _detailService = repo;
         }
 
 
@@ -41,7 +41,7 @@ namespace FirstAspWebApi.Controllers
         {
             List<DetailsDto> detailsDtos = new List<DetailsDto>();
 
-             var Details = _repo.GetAllData();
+             var Details = _detailService.GetAll();
             if( Details.Count == 0 )
             {
                 return BadRequest("no data entered");
@@ -66,7 +66,7 @@ namespace FirstAspWebApi.Controllers
         [HttpGet("getDetailById/{id:int}")]
         public ActionResult Get(int id)
         {
-          var matchData=  _repo.GetUserById(id);
+          var matchData=  _detailService.GetById(id);
 
             if( matchData != null )
             {
@@ -102,7 +102,7 @@ namespace FirstAspWebApi.Controllers
         {
             var Converter=ConvertToModel(detailDto);
 
-           int detailsIdRecived= _repo.AddDetails(Converter);
+           int detailsIdRecived= _detailService.Add(Converter);
             if (detailsIdRecived != null)
             {
                 return Ok(detailsIdRecived);
@@ -123,11 +123,11 @@ namespace FirstAspWebApi.Controllers
         [HttpPut("update")]
         public ActionResult Put(DetailsDto detailDto)
         {
-            var oldDetails = _repo.GetUserById(detailDto.DetailId);
+            var oldDetails = _detailService.GetById(detailDto.DetailId);
             if (oldDetails != null)
             {
                 var updatedDetail = ConvertToModel(detailDto);
-                var modifirdDetail = _repo.UpdateDetails(updatedDetail);
+                var modifirdDetail = _detailService.Update(updatedDetail);
                 return Ok(modifirdDetail);
             }
             return NotFound("updating error");
@@ -137,9 +137,12 @@ namespace FirstAspWebApi.Controllers
         [HttpDelete("delete")]
         public ActionResult Delete(int id)
         {
-            bool deteing=_repo.DeletDetails(id);
-            if (deteing)
+            var detail = _detailService.GetById(id);
+
+            // bool deteing = _detailService.Delete(id);
+            if (detail!=null)
             {
+                _detailService.Delete(detail);
                 return Ok(id);
             }
             return BadRequest("no match id for deleting");

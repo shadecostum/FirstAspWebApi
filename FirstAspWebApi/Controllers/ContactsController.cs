@@ -12,11 +12,11 @@ namespace FirstAspWebApi.Controllers
     {
        // private readonly ContactRepo _contactRepo;
 
-        private readonly IContactRepo _contactRepo;
+        private readonly IContactService _contactService;
 
-        public ContactsController(IContactRepo contactRepo)
+        public ContactsController(IContactService contactRepo)
         {
-            _contactRepo = contactRepo;
+            _contactService = contactRepo;
         }
 
         private ContactDto ConvertToDto(Contact contact)
@@ -39,7 +39,7 @@ namespace FirstAspWebApi.Controllers
         {
            List<ContactDto> contactsList = new List<ContactDto>();
 
-            var contactData= _contactRepo.GetAllData();
+            var contactData= _contactService.GetAll();
 
             if (contactData.Count==0)
             {
@@ -59,7 +59,7 @@ namespace FirstAspWebApi.Controllers
         [HttpGet("getById/{id:int}")]
         public IActionResult Get(int id)
         {
-            var contactId=_contactRepo.GetContactById(id);
+            var contactId=_contactService.GetById(id);
 
             if(contactId!=null)
             {
@@ -87,7 +87,7 @@ namespace FirstAspWebApi.Controllers
         {
             var contact=ConvertToModel(contactDto);
 
-            var addContact = _contactRepo.Add(contact);
+            var addContact = _contactService.Add(contact);
 
             if (addContact != null)
             {
@@ -100,12 +100,12 @@ namespace FirstAspWebApi.Controllers
         public IActionResult Put(ContactDto contactDto)
         {
            
-           var contactId=_contactRepo.GetContactById(contactDto.ContactId);
+           var contactId=_contactService.GetById(contactDto.ContactId);
             if(contactId!=null)
             {
                 var updateContact = ConvertToModel(contactDto);
                 // var modifiedUser = _userRepo.Update(updatedUser, user);
-                var modifiedContact = _contactRepo.Update(updateContact);//first pass controller Update
+                var modifiedContact = _contactService.Update(updateContact);//first pass controller Update
                 return Ok(modifiedContact);
             }
 
@@ -119,11 +119,11 @@ namespace FirstAspWebApi.Controllers
         [HttpDelete("delete")]//do nothing with Dto
         public IActionResult Delete(int id)
         {
-            var contactData= _contactRepo.GetContactById(id);
+            var contactData= _contactService.GetById(id);
 
             if(contactData!=null)
             {
-                _contactRepo.Delete(contactData);
+                _contactService.Delete(contactData);
                 return Ok(id);
             }
             return BadRequest("Error in delete request");

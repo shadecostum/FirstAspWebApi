@@ -25,6 +25,7 @@ namespace FirstAspWebApi.Repositary
         public Contact GetContactById(int id)
         {
             var contact=   _context.contacts.Where(cont1=>cont1.ContactId==id && cont1.IsActive==true)
+                .Include(usr => usr.ContactDetails)
                 .FirstOrDefault();
             if(contact!=null)
             {

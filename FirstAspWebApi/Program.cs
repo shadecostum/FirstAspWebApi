@@ -1,6 +1,7 @@
 using FirstAspWebApi.Data;
 using FirstAspWebApi.Repositary;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace FirstAspWebApi
 {
@@ -16,12 +17,23 @@ namespace FirstAspWebApi
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnString"));
             });
-
-           builder.Services.AddTransient<IUserRepo,UserRepo>();//registering needed must added or doesnt work
-           builder.Services.AddTransient<IContactRepo,ContactRepo>();//register Contact table
-            builder.Services.AddTransient<IDetailsRepo,Detailsrepo>();//register Detailrepo
-
             builder.Services.AddControllers();
+
+            //to avoid json cycle added check 2 date nov
+            builder.Services.AddControllers().AddJsonOptions(x =>
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+
+            builder.Services.AddTransient(typeof(IRepository<>), typeof(EntityRepository<>));//note
+            builder.Services.AddTransient<IUserService, UserService>();//new generatic used registering services
+            builder.Services.AddTransient<IContactService, ContactService>();
+            builder.Services.AddTransient<IDetailsService, DetailService>();
+
+           // builder.Services.AddTransient<IUserRepo,UserRepo>();//old methodregistering needed must added or doesnt work
+           //builder.Services.AddTransient<IContactRepo,ContactRepo>();//register Contact table
+            //builder.Services.AddTransient<IDetailsRepo,Detailsrepo>();//register Detailrepo
+
+           
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

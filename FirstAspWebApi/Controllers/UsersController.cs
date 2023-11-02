@@ -10,11 +10,11 @@ namespace FirstAspWebApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserRepo _userRepo;
+        private readonly IUserService _userService;
 
-        public UsersController(IUserRepo userRepo)
+        public UsersController(IUserService userRepo)
         {
-            _userRepo = userRepo;
+            _userService = userRepo;
         }
 
 
@@ -48,7 +48,7 @@ namespace FirstAspWebApi.Controllers
         public IActionResult Get()
         {
             List<UserDto> usersDtoList = new List<UserDto>();          
-            var usersData = _userRepo.GetAllData();
+            var usersData = _userService.GetAll();
 
             if(usersData.Count==0)
             {
@@ -72,7 +72,7 @@ namespace FirstAspWebApi.Controllers
         [HttpGet("getById/{id:int}")]
         public IActionResult Get(int id)
         {
-            var userId=_userRepo.GetUserById(id);
+            var userId=_userService.GetById(id);
             if(userId!=null)
             {
                var userDto=ConvertToDto(userId);
@@ -116,7 +116,7 @@ namespace FirstAspWebApi.Controllers
             var user = ConvertToModel(userDto);
 
 
-            var adduser=_userRepo.Add(user);
+            var adduser=_userService.Add(user);
 
             if(adduser!=null)
             {
@@ -137,13 +137,13 @@ namespace FirstAspWebApi.Controllers
         [HttpPut("update")]
         public IActionResult Update(UserDto userDto)
         {
-            var user = _userRepo.GetUserById(userDto.userId);//validation
+            var user = _userService.GetById(userDto.userId);//validation
 
             if(user!=null)
             {
                 //note changes then look userRep
                 var updatedUser = ConvertToModel(userDto);
-                var modifiedUser = _userRepo.Update(updatedUser);
+                var modifiedUser = _userService.Update(updatedUser);
                 return Ok(modifiedUser);
             }
             return BadRequest("Some issue updating");
@@ -157,13 +157,13 @@ namespace FirstAspWebApi.Controllers
         //retrn id if matched condition inside
         //else bad request
         [HttpDelete("delete")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteAll(int id)
         {
-            var user= _userRepo.GetUserById(id);//validation added
+            var user= _userService.GetById(id);//validation added
 
             if(user!=null)
             {
-                _userRepo.Delete(user);//show error
+                _userService.Delete(user);//show error
                 return Ok(id);
             }
             return BadRequest("No user Deleted");

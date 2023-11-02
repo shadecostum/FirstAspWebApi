@@ -15,6 +15,8 @@ namespace FirstAspWebApi.Repositary
 
         // public bool Delete(int id);
         public void Delete(User user);
+        public void DeleteAll(User user);
+
     }
 
 
