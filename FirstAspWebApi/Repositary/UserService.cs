@@ -7,6 +7,7 @@ namespace FirstAspWebApi.Repositary
     {
 
         private IRepository<User> _repository;
+        private IRepository<Contact> _contactRepository;
 
         public UserService(IRepository<User> repository)
         {
@@ -55,6 +56,11 @@ namespace FirstAspWebApi.Repositary
         public void Delete(User user)
         {
             _repository.Delete(user);
+            var contactQuery = _contactRepository.GetById();
+            foreach(var contact in contactQuery.Where(con=>con.UserId==user.userId).ToList())
+            {
+                _contactRepository.Delete(contact);
+            }
         }
 
 

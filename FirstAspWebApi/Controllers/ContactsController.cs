@@ -33,7 +33,7 @@ namespace FirstAspWebApi.Controllers
         }
 
 
-        [HttpGet("getControllData")]
+        [HttpGet("")]
 
         public IActionResult Get()
         {
@@ -56,7 +56,7 @@ namespace FirstAspWebApi.Controllers
             
         }
 
-        [HttpGet("getById/{id:int}")]
+        [HttpGet("{id:int}")]
         public IActionResult Get(int id)
         {
             var contactId=_contactService.GetById(id);
@@ -77,12 +77,12 @@ namespace FirstAspWebApi.Controllers
                 ContactId = contactDto.ContactId,
                 FirstName = contactDto.FirstName,
                 LastName = contactDto.LastName,
-                IsActive = contactDto.IsActive,
+                IsActive = contactDto.IsActive=true,
                 UserId = contactDto.UserId,
             };
         }
 
-        [HttpPost("add")]
+        [HttpPost("")]
        public IActionResult Post(ContactDto contactDto)
         {
             var contact=ConvertToModel(contactDto);
@@ -96,7 +96,7 @@ namespace FirstAspWebApi.Controllers
             return BadRequest("Contacts Nod added");
         }
 
-        [HttpPut("update")]
+        [HttpPut("")]
         public IActionResult Put(ContactDto contactDto)
         {
            
@@ -116,7 +116,7 @@ namespace FirstAspWebApi.Controllers
             return NotFound("Not updated ");
         }
 
-        [HttpDelete("delete")]//do nothing with Dto
+        [HttpDelete("")]//do nothing with Dto
         public IActionResult Delete(int id)
         {
             var contactData= _contactService.GetById(id);

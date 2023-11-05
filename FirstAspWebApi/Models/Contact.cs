@@ -16,9 +16,9 @@ namespace FirstAspWebApi.Models
 
         public List<ContactDetail> ContactDetails { get; set;}
 
-        public User User { get; set; }
+        public User User { get; set; }//navigation property
 
-        [ForeignKey("User")]
+        [ForeignKey("User")]//navigation property name given
         public int UserId { get; set; }
     }
 }

@@ -30,14 +30,14 @@ namespace FirstAspWebApi.Controllers
                 userId = user.userId,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                IsAdmin = user.IsAdmin,
+                IsAdmin = user.IsAdmin.ToString(),
                 IsActive = user.IsActive,
                 CountContacts = user.Contacts != null ? user.Contacts.Count() : 0
             };
         }
 
 
-        [HttpGet("getAll")]
+        [HttpGet("")]
         //list showing as Dto Model Class Contain
         //so 1 create a list Dto data to show 
         //2 call rep fun it retur user table entire data
@@ -69,7 +69,7 @@ namespace FirstAspWebApi.Controllers
         //1 using id search data call rep fun id check
         //2 recive readonly state od specific user data
         //check data get convert to Dto or notfound
-        [HttpGet("getById/{id:int}")]
+        [HttpGet("{id:int}")]
         public IActionResult Get(int id)
         {
             var userId=_userService.GetById(id);
@@ -82,9 +82,6 @@ namespace FirstAspWebApi.Controllers
         }
 
 
-
-
-
         private User ConvertToModel(UserDto userDto)
         {
             return new User()
@@ -92,10 +89,10 @@ namespace FirstAspWebApi.Controllers
                 userId=userDto.userId,
                 FirstName = userDto.FirstName,
                 LastName = userDto.LastName,
-                IsAdmin = userDto.IsAdmin,
-                IsActive = userDto.IsActive,
+                IsAdmin = Convert.ToBoolean( userDto.IsAdmin),
+                IsActive = userDto.IsActive=true,
 
-            };
+            }; 
         }
 
 
@@ -109,7 +106,7 @@ namespace FirstAspWebApi.Controllers
         //3 repo func add called and variable passed
         //4 so user added id return  show Ok()
         //id not return badrequest
-        [HttpPost("add")]
+        [HttpPost("")]
         public IActionResult Post(UserDto userDto)
         {
 
@@ -134,7 +131,7 @@ namespace FirstAspWebApi.Controllers
         //4 we have Dto data so it convert to user data
         //5 converted data passed to fun update
         //
-        [HttpPut("update")]
+        [HttpPut("")]
         public IActionResult Update(UserDto userDto)
         {
             var user = _userService.GetById(userDto.userId);//validation
@@ -156,7 +153,7 @@ namespace FirstAspWebApi.Controllers
         //call repo delet fun writen pass matched data
         //retrn id if matched condition inside
         //else bad request
-        [HttpDelete("delete")]
+        [HttpDelete("")]
         public IActionResult DeleteAll(int id)
         {
             var user= _userService.GetById(id);//validation added

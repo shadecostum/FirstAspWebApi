@@ -7,6 +7,7 @@ namespace FirstAspWebApi.Repositary
     {
         //1 calling Irepositary injection to use its function
         private IRepository<Contact> _Erepository;
+        private IRepository<ContactDetail> _detailRepository;
 
         public ContactService(IRepository<Contact> erepository)
         {
@@ -60,6 +61,11 @@ namespace FirstAspWebApi.Repositary
         public void Delete(Contact contact)
         {
             _Erepository.Delete(contact);
+            var contactQuery = _detailRepository.GetById();
+            foreach (var contac in contactQuery.Where(con => con.ContactId == contact.ContactId).ToList())
+            {
+                _detailRepository.Delete(contac);
+            }
         }
     }
 }

@@ -12,9 +12,9 @@ namespace FirstAspWebApi.Models
 
         public string EmailOrNumber { get; set; }
 
-        public Contact Contact { get; set; }
+        public Contact Contact { get; set; }//this is the navigation property initialize
 
-        [ForeignKey("Contact")]
+        [ForeignKey("Contact")]//this name and navigation property should match
         public int ContactId { get; set; }
 
     }

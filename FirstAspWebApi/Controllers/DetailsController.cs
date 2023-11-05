@@ -36,7 +36,7 @@ namespace FirstAspWebApi.Controllers
         //fuction called to get all data 
         //condition checked 
         //all data converted and stored in Dto returned dto data to website
-        [HttpGet("getDetailData")]
+        [HttpGet("")]
         public ActionResult Get() 
         {
             List<DetailsDto> detailsDtos = new List<DetailsDto>();
@@ -63,7 +63,7 @@ namespace FirstAspWebApi.Controllers
             //return NotFound("sorry no data add data first");
         }
 
-        [HttpGet("getDetailById/{id:int}")]
+        [HttpGet("{id:int}")]
         public ActionResult Get(int id)
         {
           var matchData=  _detailService.GetById(id);
@@ -97,7 +97,7 @@ namespace FirstAspWebApi.Controllers
 
         }
 
-        [HttpPost("add")]
+        [HttpPost("")]
         public IActionResult Post(DetailsDto detailDto)
         {
             var Converter=ConvertToModel(detailDto);
@@ -120,7 +120,7 @@ namespace FirstAspWebApi.Controllers
             //return BadRequest("bad request for adding");
         }
 
-        [HttpPut("update")]
+        [HttpPut("")]
         public ActionResult Put(DetailsDto detailDto)
         {
             var oldDetails = _detailService.GetById(detailDto.DetailId);
@@ -134,7 +134,7 @@ namespace FirstAspWebApi.Controllers
 
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("")]
         public ActionResult Delete(int id)
         {
             var detail = _detailService.GetById(id);

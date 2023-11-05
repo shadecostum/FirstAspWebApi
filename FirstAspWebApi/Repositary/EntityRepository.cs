@@ -61,15 +61,37 @@ namespace FirstAspWebApi.Repositary
 
         public void Delete(T entity)
         {
+            
+            
             _context.Entry(entity).State = EntityState.Modified;
 
             var isActiveProperty = entity.GetType().GetProperty("IsActive");
+            var userIdProperty = entity.GetType().GetProperty("userId");
+           var contactIdProperty = entity.GetType().GetProperty("ContactId");
 
             if (isActiveProperty != null)
             {
                 isActiveProperty.SetValue(entity, false);
-                _table.Update(entity);
 
+
+                if(userIdProperty != null)
+                {
+                    var userIdd = (int)userIdProperty.GetValue(entity);
+                    _table.Update(entity);
+                    foreach (var contact in _context.contacts.Where(c => c.UserId == userIdd))
+                    {
+                        contact.IsActive = false;
+                    }
+                }
+
+                if(contactIdProperty!=null)
+                {
+                    var contactIdd = (int)contactIdProperty.GetValue(entity);
+                    foreach (var details in _context.Details.Where(c => c.ContactId == contactIdd))
+                    {
+                        _context.Details.Remove(details);
+                    }
+                }
             }
             else
             {

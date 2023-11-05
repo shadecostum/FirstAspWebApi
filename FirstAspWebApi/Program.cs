@@ -23,6 +23,14 @@ namespace FirstAspWebApi
             builder.Services.AddControllers().AddJsonOptions(x =>
             x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+            builder.Services.AddCors(option=>
+            {
+                option.AddPolicy("AllowLocalhost4200", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                });
+            });//for connecting frond end
+
 
             builder.Services.AddTransient(typeof(IRepository<>), typeof(EntityRepository<>));//note
             builder.Services.AddTransient<IUserService, UserService>();//new generatic used registering services
@@ -48,6 +56,8 @@ namespace FirstAspWebApi
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowLocalhost4200");//front end connection
 
             app.UseAuthorization();
 

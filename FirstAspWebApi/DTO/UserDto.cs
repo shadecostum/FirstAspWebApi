@@ -12,7 +12,7 @@ namespace FirstAspWebApi.DTO
         [Required]
         public string LastName { get; set; }
 
-        public bool IsAdmin { get; set; }
+        public string IsAdmin { get; set; }
 
         public bool IsActive { get; set; }
 
